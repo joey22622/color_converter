@@ -21,11 +21,11 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  // color: white;
 }
 
 .App-link {
-  color: #61dafb;
+  // color: #61dafb;
 }
 
 @keyframes App-logo-spin {
@@ -35,4 +35,34 @@
   to {
     transform: rotate(360deg);
   }
+}
+.color-banner{
+  height: 100px;
+  width: 100vw;
+}
+.content-wrap{
+  display: flex;
+  width: 100%;
+  &>div{
+    width: 50%;
+  }
+}
+.inputs-wrap{
+  width: 100%;
+  min-height: 40vh;
+  // background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.rgba-wrap,
+.hex-wrap{
+  p{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.inputs-wrap label{
+  // display: none;
 }
