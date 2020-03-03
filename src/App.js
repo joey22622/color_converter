@@ -5,7 +5,7 @@ import './App.scss';
 class App extends React.Component {
   state={
     hex : {
-      color : '000000',
+      color : '123456',
     },
     rgba : {
       r : 0,
@@ -14,14 +14,31 @@ class App extends React.Component {
       a : 0
     }
   }
-  
-  updateHex = event => {
-    console.log(event.keyCode);
-    console.log(event.target.selectionStart)
-    let hex = this.state.hex;
-    hex.color = event.target.value;
+  input = React.createRef();
+  errorMessage = () => {
 
-    this.setState({hex});
+  }
+  updateHex = event => {
+    // console.log(event.keyCode);
+    const input = event.target.value.toUpperCase();
+    const regex = RegExp('^[A-F0-9]+$' , 'g');
+    const i = event.target.selectionStart;
+    console.log(input)
+    // console.log(regex.test(input));
+    if(regex.test(input)){
+      console.log(i)
+      let hex = this.state.hex.color;
+      hex = input.substr(0,i) + input.substr(i+2);
+      hex = input.substr(0,i) + input.substr(i+2);
+      // console.log(input.substr(i+1))
+      // console.log(input.substr(0,i))
+      console.log(hex);
+
+      this.setState({hex});
+    } else {
+      this.errorMessage();
+      console.log("yikes");
+    }
   
   }
 
@@ -37,7 +54,7 @@ class App extends React.Component {
                 <h2>Hex Value</h2>
                 <p className="hex-input">
                 <label>Alpha-Numeric Value</label>
-                <input value={this.state.hex.color} onKeyUp={(event)=>{this.updateHex(event)}} onChange={(event)=>{this.getCaret(event)}}/>
+                <input type="text" ref={this.input} value={this.state.hex.color} onChange={(event)=>{this.updateHex(event)}}/>
                 </p>
               </div>
               <div className="rgba-wrap">
