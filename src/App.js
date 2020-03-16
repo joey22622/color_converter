@@ -53,16 +53,16 @@ class App extends React.Component {
       //   console.log(i)
         if(i < input.length && input.length === max){
             value = (input.substr(0,i) + input.substr(i+1)).toUpperCase();
-            console.log("11123");
+            console.log("if 1");
           } else if(input.length === max) {
             value = input.substr(1).toUpperCase()
-            console.log("2");
+            console.log("if 2");
           } else if(max === 4 && i >= 0){
-            console.log("yo");
+            console.log("if 3");
             value = (input.substr(0,i) + input.substr(i+1)).toUpperCase();
           } else {
             value = (input.substr(0,i) + "0" + input.substr(i)).toUpperCase();
-            console.log("yo");
+            console.log("else");
           }
           if(max===4){
             if(parseFloat(value) <= 256){
@@ -79,23 +79,26 @@ class App extends React.Component {
               }
             } else {
               console.log(value);
-              value = 255;
+              value = "255";
             }
           }
         } else {
           i = i-1;
-          console.log(`laskdfjalsdf`);
+          console.log(`else else`);
           console.log(input.length)
           if(max === 4 && input.length <= 1){
-            value = 0;
+            console.log(`else if`);
+            value = "0";
           }
         }
         console.log(colors.rgba.color)
-        console.log(i)
-        this.setToValue(colors,value,path);
+        console.log(value)
+        if(value){
+          this.setToValue(colors,value,path);
+        }
         this.setState({colors}, () =>{
-        this.refs.input.selectionStart = i;
-        this.refs.input.selectionEnd = i;
+        this.refs[name].selectionStart = i;
+        this.refs[name].selectionEnd = i;
       })
   }
 
@@ -109,26 +112,26 @@ class App extends React.Component {
                 <h2>Hex Value</h2>
                 <p className="hex-input">
                 <label>Alpha-Numeric Value</label>
-                <input type="text" name="hex" ref="input" className="hex-input-field" value={this.state.colors.hex.color} onChange={(event)=>{this.updateHex(event)}}/>
+                <input type="text" name="hex" ref="hex" className="hex-input-field" value={this.state.colors.hex.color} onChange={(event)=>{this.updateHex(event)}}/>
                 </p>
               </div>
               <div className="rgba-wrap">
                 <h2 className="rgba-head">RGB(A)</h2>
                 <p className="red-input">
                 <label>Red</label>
-                <input placeholder="red" name="r" onChange={(event)=>{this.updateHex(event)}} value={this.state.colors.rgba.color.r}/>
+                <input placeholder="red" name="r" ref="r" onChange={(event)=>{this.updateHex(event)}} value={this.state.colors.rgba.color.r}/>
                 </p>
                 <p className="green-input">
                 <label>Green</label>
-                <input placeholder="green" name="g" onChange={(event)=>{this.updateHex(event)}} value={this.state.colors.rgba.color.g}/>
+                <input placeholder="green" name="g" ref="g" onChange={(event)=>{this.updateHex(event)}} value={this.state.colors.rgba.color.g}/>
                 </p>
                 <p className="blue-input">
                 <label>Blue</label>
-                <input placeholder="blue" name="b" onChange={(event)=>{this.updateHex(event)}} value={this.state.colors.rgba.color.b}/>
+                <input placeholder="blue" name="b" ref="b" onChange={(event)=>{this.updateHex(event)}} value={this.state.colors.rgba.color.b}/>
                 </p>
                 <p className="alpha-input">
                 <label>Alpha</label>
-                <input placeholder="alpha" name="a" readOnly="true" value={this.state.colors.rgba.color.a}/>
+                <input placeholder="alpha" name="a" ref="a" readOnly="true" value={this.state.colors.rgba.color.a}/>
                 </p>
               </div>
             </div>
