@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -12,10 +14,18 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+input{
+  // display: inline;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  color: black;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 2rem;
+  text-align: center;
+  border-radius: .1rem;
+}
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,6 +34,9 @@
   // color: white;
 }
 
+h2{
+  margin: .5rem;
+}
 .App-link {
   // color: #61dafb;
 }
@@ -37,32 +50,63 @@
   }
 }
 .color-banner{
-  height: 100px;
-  width: 100vw;
+  min-height: 100px;
 }
 .content-wrap{
   display: flex;
   width: 100%;
+
   &>div{
     width: 50%;
   }
 }
 .inputs-wrap{
-  width: 100%;
   min-height: 40vh;
-  // background: white;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 }
 .rgba-wrap,
 .hex-wrap{
   p{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    padding: 1rem;
+    margin: 0;
   }
+}
+.hex-content-wrap{
+  display: table;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.rgba-content-wrap{
+  display: flex;
+  width: 100%;
 }
 .inputs-wrap label{
   // display: none;
+  text-transform: uppercase;
+  font-size: .7rem;
+  margin-bottom: .5rem;
+}
+
+.alpha-input,
+.opacity-input {
+  opacity: .5;
+  pointer-events: none;
+}
+
+code{
+  font-size: 1.6rem;
+}
+.copy-button{
+  background: none;
+  border: none;
+  padding: .5rem;
+  svg{
+    height: 1.4rem;
+    width: 1.4rem;
+    *{
+      fill: white;
+    }
+
+  }
 }
