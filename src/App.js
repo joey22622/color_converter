@@ -21,6 +21,7 @@ class App extends React.Component {
   errorMessage = () => {
 
   }
+  
   setToValue = (obj, value, path) => {
       var i;
       path = path.split('.');
@@ -29,7 +30,38 @@ class App extends React.Component {
 
       obj[path[i]] = value;
   }
-  updateHex = e =>{
+  syncColors = changed => {
+    const colors = this.state.colors;
+    let r = colors.rgba.color.r;
+    let g = colors.rgba.color.g;
+    let b = colors.rgba.color.b;
+    if(changed === "hex"){
+      let rgb = [];
+      let hex = colors.hex.color.split('');
+      hex.forEach((char, i) => {
+        let code = char.charCodeAt(0);
+        char = code >= 65 ? code - 55 : char;
+        if(i%2 < 1){
+          rgb.push(char*16+ parseFloat((hex[i+1].charCodeAt(0) >= 65 ? hex[i+1].charCodeAt(0) - 55 : hex[i+1]))); 
+        }        
+      });
+      colors.rgba.color.r=rgb[0];
+      colors.rgba.color.g=rgb[1];
+      colors.rgba.color.b=rgb[2];      
+    } else {
+      let rgb = [];
+      let hex = [];
+      rgb.push(r,g,b);
+      rgb.forEach(char => {
+        const char1 = String(Math.floor(char/16) > 9 ? String.fromCharCode(Math.floor(char/16)+55) : Math.floor(char/16));
+        const char2 = String(char%16 > 9 ? String.fromCharCode((char%16)+55) : char%16);
+        hex.push(char1 + char2);
+      });
+      colors.hex.color = hex.join('');
+    }
+    this.setState({colors});
+  }
+  handleColorInput = e =>{
       const colors= this.state.colors;
       let i = e.target.selectionStart;
       let input = e.currentTarget.value;
@@ -53,16 +85,16 @@ class App extends React.Component {
       //   console.log(i)
         if(i < input.length && input.length === max){
             value = (input.substr(0,i) + input.substr(i+1)).toUpperCase();
-            console.log("if 1");
+            // console.log("if 1");
           } else if(input.length === max) {
             value = input.substr(1).toUpperCase()
-            console.log("if 2");
+            // console.log("if 2");
           } else if(max === 4 && i >= 0){
-            console.log("if 3");
+            // console.log("if 3");
             value = (input.substr(0,i) + input.substr(i+1)).toUpperCase();
           } else {
             value = (input.substr(0,i) + "0" + input.substr(i)).toUpperCase();
-            console.log("else");
+            // console.log("else");
           }
           if(max===4){
             if(parseFloat(value) <= 256){
@@ -78,27 +110,28 @@ class App extends React.Component {
                 value = value.substring(zeroes);
               }
             } else {
-              console.log(value);
+              // console.log(value);
               value = "255";
             }
           }
         } else {
           i = i-1;
-          console.log(`else else`);
-          console.log(input.length)
+          // console.log(`else else`);
+          // console.log(input.length)
           if(max === 4 && input.length <= 1){
-            console.log(`else if`);
+            // console.log(`else if`);
             value = "0";
           }
         }
-        console.log(colors.rgba.color)
-        console.log(value)
+        // console.log(colors.rgba.color)
+        // console.log(value)
         if(value){
           this.setToValue(colors,value,path);
         }
         this.setState({colors}, () =>{
         this.refs[name].selectionStart = i;
         this.refs[name].selectionEnd = i;
+        this.syncColors(name)
       })
   }
 
@@ -112,22 +145,24 @@ class App extends React.Component {
                 <h2>Hex Value</h2>
                 <p className="hex-input">
                 <label>Alpha-Numeric Value</label>
-                <input type="text" name="hex" ref="hex" className="hex-input-field" value={this.state.colors.hex.color} onChange={(event)=>{this.updateHex(event)}}/>
+                <input type="text" name="hex" ref="hex" className="hex-input-field" value={this.state.colors.hex.color} onChange={(event)=>{this.handleColorInput(event)}}/>
+                <label>Opacity</label>
+                <input type="text" name="opacity" ref="opacity" className="opacity-input-field"/>
                 </p>
               </div>
               <div className="rgba-wrap">
                 <h2 className="rgba-head">RGB(A)</h2>
                 <p className="red-input">
                 <label>Red</label>
-                <input placeholder="red" name="r" ref="r" onChange={(event)=>{this.updateHex(event)}} value={this.state.colors.rgba.color.r}/>
+                <input placeholder="red" name="r" ref="r" onChange={(event)=>{this.handleColorInput(event)}} value={this.state.colors.rgba.color.r}/>
                 </p>
                 <p className="green-input">
                 <label>Green</label>
-                <input placeholder="green" name="g" ref="g" onChange={(event)=>{this.updateHex(event)}} value={this.state.colors.rgba.color.g}/>
+                <input placeholder="green" name="g" ref="g" onChange={(event)=>{this.handleColorInput(event)}} value={this.state.colors.rgba.color.g}/>
                 </p>
                 <p className="blue-input">
                 <label>Blue</label>
-                <input placeholder="blue" name="b" ref="b" onChange={(event)=>{this.updateHex(event)}} value={this.state.colors.rgba.color.b}/>
+                <input placeholder="blue" name="b" ref="b" onChange={(event)=>{this.handleColorInput(event)}} value={this.state.colors.rgba.color.b}/>
                 </p>
                 <p className="alpha-input">
                 <label>Alpha</label>
