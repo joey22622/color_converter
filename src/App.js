@@ -1,5 +1,7 @@
 import React  from 'react';
 import './App.scss';
+import {Helmet} from "react-helmet";
+
 
 class App extends React.Component {
   state={
@@ -215,6 +217,11 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
+        <Helmet>
+                <meta charSet="utf-8" />
+                <title>Color Converter - Hex and RGB</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
         <header className="App-header">
         </header>
           <div className="content-wrap">
