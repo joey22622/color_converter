@@ -1,9 +1,52 @@
+@font-face {
+  font-family: 'icons';
+  src:  url('fonts/icomoon.eot?bulo5q');
+  src:  url('fonts/icomoon.eot?bulo5q#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?bulo5q') format('truetype'),
+    url('fonts/icomoon.woff?bulo5q') format('woff'),
+    url('fonts/icomoon.svg?bulo5q#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-add_icon:before {
+  content: "\e900";
+}
+.icon-copy_icon:before {
+  content: "\e901";
+}
+.icon-info_icon:before {
+  content: "\e902";
+}
+
+
 .App {
   text-align: center;
   background-color: #282c34;
   min-height: 100vh;
 }
+button{
+  border: none;
+  &:focus {outline:0;}
+  cursor: pointer;
 
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -51,17 +94,79 @@ h2{
 }
 .color-banner{
   min-height: 100px;
+
+  .info-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 1rem;
+    padding-top: 10rem;
+    button{
+      background: none;
+      border: none;
+      padding: .5rem;
+      opacity: .5;
+      cursor: pointer;
+      svg{
+        height: 1.4rem;
+        width: 1.4rem;
+        *{
+          fill: white;
+        }      
+      }
+      &:hover{
+        opacity: 1;
+        &+code{
+          opacity: 1;
+        }
+      }
+    }
+    .add-swatch-button{
+      padding: 0rem;
+      line-height: 0;
+      font-size: 2.8rem;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+      svg{
+        height: 1.8rem;
+        width: 1.8rem;
+      }
+    }
+    .numeric-results-wrap{
+      text-align: left;
+      &>div{
+        display: flex;
+        align-items: center;
+        code{
+          margin-left: 1.4rem;
+        }
+        button:hover{
+        }
+        code{
+          font-size: 1.6rem;
+          opacity: .5;
+          text-shadow: 1px 1px 2px black;
+        }
+
+      }
+    }
+  }
 }
 .content-wrap{
-  display: flex;
+  display: grid;
   width: 100%;
+  grid-template-columns: repeat(2,1fr);
+  gap: .5rem;
+  padding: .5rem;
+  box-sizing: border-box;
 
-  &>div{
-    width: 50%;
-  }
+  // &>div{
+  //   width: 50%;
+  // }
 }
 .inputs-wrap{
   min-height: 40vh;
+  background: rgba(0,0,0,.2);
 }
 .rgba-wrap,
 .hex-wrap{
@@ -93,20 +198,138 @@ h2{
   opacity: .5;
   pointer-events: none;
 }
-
-code{
-  font-size: 1.6rem;
-}
-.copy-button{
-  background: none;
-  border: none;
+.swatch-grid{
+  margin-top: .5rem;
   padding: .5rem;
-  svg{
-    height: 1.4rem;
-    width: 1.4rem;
-    *{
-      fill: white;
-    }
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: .5rem;
+  background: rgba(0,0,0,.2);
+  .swatch{
+    width: 100%;
+    padding-top: 100%;
+    position: relative;
+    div{
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: .5rem;
+      box-sizing: border-box;
 
+      .load-swatch-button{
+        display: block;
+        line-height: 0;
+        height: 100%;
+        width: 100%;
+        font-size: 4rem;
+        background: none;
+        text-shadow: 0 0 0 0;
+        opacity: 0;
+        transition: .2s;
+        cursor: pointer;
+        color: white;
+        // background: rgba(255,255,255,.6);
+          &:hover{
+            opacity: 1;
+            text-shadow: 0px 0px 3px rgba(0,0,0,.4);
+          }
+      }
+    }
+  }
+  .empty-swatch{
+    background: rgba(0,0,0,.1);
+    button{
+      top:0;
+      left: 0; 
+      height: 100%;
+      width: 100%;
+      box-sizing: border-box;
+      border: dashed 1.4px rgba(255,255,255,.2);
+      border-radius: .4rem;
+      background: none;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      svg{
+        height: 105%;
+        width: 105%;
+        position: absolute;
+        *{
+          stroke-width: 10px;
+          stroke: rgba(255,255,255,.2);
+          fill: rgba(0,0,0,0);
+        }
+        &.hovered{
+          opacity: 0;
+          z-index: 1;
+          &:hover{
+            opacity: 1;
+          }
+        }
+      }
+    }
   }
 }
+.clear-swatches-wrap{
+  display: flex;
+  margin-top: .5rem;  
+  button{
+    background: rgba(0,0,0,.5);
+    padding: .6rem;
+    svg{
+      pointer-events: none;
+      height: 1.6rem;
+      * {
+        fill: rgba(255,255,255,1);
+        transition: .2s;
+      }
+    }
+  }
+}
+.clear-lock{
+  margin-left: .5rem;
+  svg{
+    opacity: .4;
+    transition: .2s;
+  }
+  &:hover{
+    svg{
+      opacity: 1;
+    }
+  }
+  &[data-locked="false"]{
+
+    svg{
+      #lock{
+        // display: none;
+        transform: translateY(-130px);
+      }
+    }
+  }
+}
+.clear-swatches{
+  border: none;
+  width: 100%;
+  font-size: 1.2rem;
+  color: rgba(255,255,255,.5);
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: .4;
+  transition: .3s;
+  &[data-locked="false"]{
+    pointer-events: all;
+    opacity: 1;
+
+    &:hover{
+      color: white;
+    }
+  }
+
+}
+

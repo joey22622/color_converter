@@ -5,7 +5,7 @@ class App extends React.Component {
   state={
     colors : {
       hex : {
-        color : '123456',
+        color : '000000',
       },
         rgba : {
           color : {
@@ -15,11 +15,67 @@ class App extends React.Component {
             a : 1
         }
       }
+    },
+    swatches : [],
+    swatchButtons : {
+      style : {}
     }
   }
   input = React.createRef();
   errorMessage = () => {
+  }
+  toggleLock(e){
+    // console.log(e.target.getAttribute("data-locked"))
+    if(e.target.getAttribute("data-locked") === "true"){
+      e.target.setAttribute("data-locked", "false");
+      document.querySelector(".clear-swatches").setAttribute("data-locked", "false")
+    } else {
+      e.target.setAttribute("data-locked", "true");
+      document.querySelector(".clear-swatches").setAttribute("data-locked", "true")
 
+      // console.log(e.target)
+    }
+  }
+  componentDidMount = () => {
+    let state = this.state;
+    if (localStorage.getItem("swatches") === null) {
+      state.swatches = [];
+    } else {
+      state.swatches = JSON.parse(localStorage.swatches);
+    }
+    this.setState({state})
+  }
+  loadSwatch = (key) => {
+    let state = this.state;
+    // console.log(hex);
+    state.colors.hex.color = this.state.swatches[key];
+    // console.log(hex)
+    this.setState(state,()=>{
+      console.log(this.state.colors.hex)
+      this.syncColors("hex")
+    })
+  }
+  addSwatch = () => {    
+    console.log(`addSwatch`);
+    let swatches = this.state.swatches;
+    for(let i = 0; i < swatches.length; i++){
+      if(swatches[i] === this.state.colors.hex.color){
+        return;
+      }
+    }
+    swatches.push(this.state.colors.hex.color);
+    localStorage.setItem("swatches", JSON.stringify(swatches));
+    let localSwatches = JSON.parse(localStorage.swatches);
+    console.log(localSwatches);
+    this.setState(swatches);
+  }
+  clearSwatches = () => {
+    console.log(`clearSwatches`);
+    let state = this.state;
+    state.swatches = [];
+    this.setState(state, ()=>{
+      localStorage.setItem("swatches", JSON.stringify(state.swatches))
+    })
   }
   
   setToValue = (obj, value, path) => {
@@ -27,7 +83,6 @@ class App extends React.Component {
       path = path.split('.');
       for (i = 0; i < path.length - 1; i++)
           obj = obj[path[i]];
-
       obj[path[i]] = value;
   }
   copy(classStr) {
@@ -201,25 +256,56 @@ class App extends React.Component {
               </div>
             </div>
             <div className="results-column">
-              <div className="color-banner" style={{backgroundColor : '#'+this.state.colors.hex.color}}></div>
-              <div className="numeric-results-wrap">
-                <div className="hex-results">
-                  <button className="copy-button copy-rgba" onClick={()=>{this.copy(".hex-code")}}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 674.01 672.6"><title>Asset 2</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path d="M543,38.88V0L149.4,0A149.56,149.56,0,0,0,0,149.43V543H38.88V149.43A110.67,110.67,0,0,1,149.43,38.88Z"/><path d="M585.42,98.67H188.73a88.69,88.69,0,0,0-88.65,88.65V584a88.68,88.68,0,0,0,88.65,88.59H585.42A88.69,88.69,0,0,0,674,584V187.32A88.68,88.68,0,0,0,585.42,98.67Zm0,535.05H188.73A49.79,49.79,0,0,1,139,584V187.32a49.79,49.79,0,0,1,49.73-49.8H585.42a49.79,49.79,0,0,1,49.71,49.8V584A49.79,49.79,0,0,1,585.42,633.72Z"/></g></g></svg>
-                    {/* <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><title>Artboard 1</title><path d="M304.69,144.94A103.86,103.86,0,0,0,200.94,248.69V522h27V248.69a76.86,76.86,0,0,1,76.77-76.77H578v-27Z"/><path d="M607.48,213.44H332A61.59,61.59,0,0,0,270.44,275V550.48A61.58,61.58,0,0,0,332,612H607.48A61.58,61.58,0,0,0,669,550.48V275A61.58,61.58,0,0,0,607.48,213.44Zm34.53,337A34.57,34.57,0,0,1,607.48,585H332a34.57,34.57,0,0,1-34.53-34.53V275A34.57,34.57,0,0,1,332,240.42H607.48A34.57,34.57,0,0,1,642,275Z"/></svg> */}
-                  </button>
-                  <code className="hex-code"> {'#' +this.state.colors.hex.color}</code>
-                </div>
-                <div className="rgba-results">
-                  <button onClick={()=>{this.copy(".rgba-code")}} className="copy-button copy-rgba">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 674.01 672.6"><title>Asset 2</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path d="M543,38.88V0L149.4,0A149.56,149.56,0,0,0,0,149.43V543H38.88V149.43A110.67,110.67,0,0,1,149.43,38.88Z"/><path d="M585.42,98.67H188.73a88.69,88.69,0,0,0-88.65,88.65V584a88.68,88.68,0,0,0,88.65,88.59H585.42A88.69,88.69,0,0,0,674,584V187.32A88.68,88.68,0,0,0,585.42,98.67Zm0,535.05H188.73A49.79,49.79,0,0,1,139,584V187.32a49.79,49.79,0,0,1,49.73-49.8H585.42a49.79,49.79,0,0,1,49.71,49.8V584A49.79,49.79,0,0,1,585.42,633.72Z"/></g></g></svg>
-                    {/* <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><title>Artboard 1</title><path d="M304.69,144.94A103.86,103.86,0,0,0,200.94,248.69V522h27V248.69a76.86,76.86,0,0,1,76.77-76.77H578v-27Z"/><path d="M607.48,213.44H332A61.59,61.59,0,0,0,270.44,275V550.48A61.58,61.58,0,0,0,332,612H607.48A61.58,61.58,0,0,0,669,550.48V275A61.58,61.58,0,0,0,607.48,213.44Zm34.53,337A34.57,34.57,0,0,1,607.48,585H332a34.57,34.57,0,0,1-34.53-34.53V275A34.57,34.57,0,0,1,332,240.42H607.48A34.57,34.57,0,0,1,642,275Z"/></svg> */}
-                  </button>
-                  <code className="rgba-code">{`rgba(${this.state.colors.rgba.color.r},${this.state.colors.rgba.color.g},${this.state.colors.rgba.color.b},${this.state.colors.rgba.color.a})`}</code>
+              <div className="color-banner" style={{backgroundColor : '#'+this.state.colors.hex.color}}>
+                <div className="info-row">
+                  <div className="numeric-results-wrap">
+                    <div className="hex-results">
+                      <button className="copy-button copy-rgba" onClick={()=>{this.copy(".hex-code")}}>
+                      <i className="icon-copy_icon"></i>
+                      </button>
+                      <code className="hex-code"> {'#' +this.state.colors.hex.color}</code>
+                    </div>
+                    <div className="rgba-results">
+                      <button onClick={()=>{this.copy(".rgba-code")}} className="copy-button copy-rgba">
+                      <i className="icon-copy_icon"/>
+                      </button>
+                      <code className="rgba-code">{`rgba(${this.state.colors.rgba.color.r},${this.state.colors.rgba.color.g},${this.state.colors.rgba.color.b},${this.state.colors.rgba.color.a})`}</code>
+                    </div>
+                  </div>
+                  <div className="add-swatch-button-wrap">
+                    <button className="add-swatch-button" onClick={this.addSwatch}>+</button>
+                  </div>
                 </div>
               </div>
+              <div className="swatch-grid">
+              {this.state.swatches.map((swatch, i ) => {
+                        return(
+                          <div className="swatch" style={{background : `#`+swatch}}>
+                            <div>
+                              <button key={i} className="load-swatch-button"  onClick={()=> {this.loadSwatch(i)}}>
+                                <i className="icon-info_icon"></i>
+                              </button>
+                            </div>
+                          </div>
+                        )
+                })}
+                <div className="empty-swatch swatch">
+                    <div className="add-swatch-wrap">
+                      <button className="add-swatch-button" onClick={this.addSwatch}>
+                        <svg id="Layer_1" data-name="Layer 1" viewBox="0 0 801.68 800"><title>add-button</title><path d="M800.84,800H.84V0h800ZM449,351.82V158.54H352.65V351.82H159.38v96.36H352.65V641.46H449V448.18H642.3V351.82Z"/></svg>
+                        <svg className="hovered" data-name="Layer 1" viewBox="0 0 801.68 800"><title>add-button</title><path style={{fill: `#`+this.state.colors.hex.color}} d="M800.84,800H.84V0h800ZM449,351.82V158.54H352.65V351.82H159.38v96.36H352.65V641.46H449V448.18H642.3V351.82Z"/></svg>
+                      </button>
+                    </div>
+                </div>
+              </div>
+              <div className="clear-swatches-wrap">
+                <button className="clear-swatches" onClick={this.clearSwatches}>Clear Swatches</button>
+                <button className="clear-lock" data-locked="true" onClick={(event) =>{this.toggleLock(event)}}>
+                  <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 801.68 800"><title>lock-icon</title><rect x="169.23" y="329.98" width="463.22" height="355.84" rx="58.06"/><path id="lock" d="M527.28,277.53a126.45,126.45,0,0,0-252.89,0v56.54h56V277.53a70.45,70.45,0,0,1,140.89,0V624.07h56Z"/></svg>
+                </button>
+              </div>
             </div>
-            </div>
+          </div>
       </div>
     )
   }
